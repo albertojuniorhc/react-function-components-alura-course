@@ -1,16 +1,26 @@
-import React from "react";
-import {
-  Button,
-  TextField,
-  Switch,
-  FormControlLabel,
-  Container,
-} from "@mui/material";
+import React, { useState } from "react";
+import { Button, TextField, Switch, FormControlLabel } from "@mui/material";
 
 function RegisterForm() {
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   return (
-    <form>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        console.log(`${name} ${lastName}`);
+      }}
+    >
       <TextField
+        value={name}
+        onChange={(event) => {
+          let tmpName = event.target.value;
+          if (tmpName.length >= 3) {
+            tmpName = tmpName.substring(0, 3);
+          }
+          setName(tmpName);
+        }}
         id="name"
         label="Name"
         variant="outlined"
@@ -18,6 +28,10 @@ function RegisterForm() {
         margin="normal"
       />
       <TextField
+        value={lastName}
+        onChange={(event) => {
+          setLastName(event.target.value);
+        }}
         id="lastname"
         label="Last Name"
         variant="outlined"
