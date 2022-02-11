@@ -16,6 +16,8 @@ function App() {
       <RegisterForm
         submitForm={onSubmitForm}
         isCPFValid={isCPFValid}
+        isNameValid={isNameValid}
+        isLastNameValid={isLastNameValid}
       />
     </Container>
   );
@@ -30,6 +32,22 @@ function isCPFValid(cpf) {
     return { isValid: false, text: "This field must have 11 digits." };
   } else {
     return { isValid: true, text: "" };
+  }
+}
+
+function isNameValid(name) {
+  if (name.length < 3) {
+    return { isValid: false, text: "This field must have at least 3 digits" };
+  } else {
+    return {isValid: true, text: ""}
+  }
+}
+
+function isLastNameValid(lastName) {
+  if (lastName.length < 2) {
+    return { isValid: false, text: "This field must have at least 2 digits" };
+  } else {
+    return {isValid: true, text: ""}
   }
 }
 

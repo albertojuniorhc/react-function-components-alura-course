@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@mui/material";
 
-function RegisterForm({ submitForm, isCPFValid }) {
+function RegisterForm({ submitForm, isCPFValid, isNameValid, isLastNameValid}) {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [cpf, setCpf] = useState("");
   const [promo, setPromo] = useState(true);
   const [news, setNews] = useState(true);
-  const [errors, setErrors] = useState({ cpf: { isValid: true, text: "" } });
+  const [errors, setErrors] = useState({
+    cpf: { isValid: true, text: "" },
+    name: { isValid: true, text: "" },
+    lastName: { isValid: true, text: ""}
+  });
+  // console.log(errors)
   return (
     <form
       onSubmit={(event) => {
@@ -20,6 +25,14 @@ function RegisterForm({ submitForm, isCPFValid }) {
         onChange={(event) => {
           setName(event.target.value);
         }}
+        onBlur={(event) => {
+          const validationName = isNameValid(name);
+          setErrors({...errors,
+            name: validationName,
+          });
+        }}
+        error={!errors.name.isValid}
+        helperText={errors.name.text}
         id="name"
         label="Name"
         variant="outlined"
@@ -31,6 +44,14 @@ function RegisterForm({ submitForm, isCPFValid }) {
         onChange={(event) => {
           setLastName(event.target.value);
         }}
+        onBlur={(event) => {
+          const validationLastName = isLastNameValid(lastName);
+          setErrors({...errors,
+            lastName: validationLastName,
+          });
+        }}
+        error={!errors.lastName.isValid}
+        helperText={errors.lastName.text}
         id="lastname"
         label="Last Name"
         variant="outlined"
@@ -46,7 +67,7 @@ function RegisterForm({ submitForm, isCPFValid }) {
         label="CPF"
         onBlur={(event) => {
           const validationCPF = isCPFValid(event.target.value);
-          setErrors({
+          setErrors({...errors,
             cpf: validationCPF,
           });
         }}
