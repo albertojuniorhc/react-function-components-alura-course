@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@mui/material";
+import { useEffect } from "react";
 
-function RegisterForm({ submitForm, isCPFValid, isNameValid, isLastNameValid}) {
+function RegisterForm({
+  submitForm,
+  isCPFValid,
+  isNameValid,
+  isLastNameValid,
+}) {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [cpf, setCpf] = useState("");
@@ -10,9 +16,18 @@ function RegisterForm({ submitForm, isCPFValid, isNameValid, isLastNameValid}) {
   const [errors, setErrors] = useState({
     cpf: { isValid: true, text: "" },
     name: { isValid: true, text: "" },
-    lastName: { isValid: true, text: ""}
+    lastName: { isValid: true, text: "" },
   });
-  // console.log(errors)
+
+  const validation = (field, func) => {
+    const fieldValidation = func(field.value);
+    setErrors({ ...errors, [field.id]: fieldValidation });
+  };
+
+  // useEffect(() => {
+  //   console.log("*****", errors);
+  // }, [errors]);
+
   return (
     <form
       onSubmit={(event) => {
@@ -26,10 +41,7 @@ function RegisterForm({ submitForm, isCPFValid, isNameValid, isLastNameValid}) {
           setName(event.target.value);
         }}
         onBlur={(event) => {
-          const validationName = isNameValid(name);
-          setErrors({...errors,
-            name: validationName,
-          });
+          validation(event.target, isNameValid);
         }}
         error={!errors.name.isValid}
         helperText={errors.name.text}
@@ -45,14 +57,11 @@ function RegisterForm({ submitForm, isCPFValid, isNameValid, isLastNameValid}) {
           setLastName(event.target.value);
         }}
         onBlur={(event) => {
-          const validationLastName = isLastNameValid(lastName);
-          setErrors({...errors,
-            lastName: validationLastName,
-          });
+          validation(event.target, isLastNameValid);
         }}
         error={!errors.lastName.isValid}
         helperText={errors.lastName.text}
-        id="lastname"
+        id="lastName"
         label="Last Name"
         variant="outlined"
         fullWidth
@@ -66,10 +75,7 @@ function RegisterForm({ submitForm, isCPFValid, isNameValid, isLastNameValid}) {
         id="cpf"
         label="CPF"
         onBlur={(event) => {
-          const validationCPF = isCPFValid(event.target.value);
-          setErrors({...errors,
-            cpf: validationCPF,
-          });
+          validation(event.target, isCPFValid);
         }}
         error={!errors.cpf.isValid}
         helperText={errors.cpf.text}
