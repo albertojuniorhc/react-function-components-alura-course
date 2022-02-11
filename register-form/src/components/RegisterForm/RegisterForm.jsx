@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@mui/material";
 
-function RegisterForm({ submitForm }) {
-  const [name, setName] = useState("Alberto");
-  const [lastName, setLastName] = useState("Junior");
-  const [cpf, setCpf] = useState("121.321.538-21");
+function RegisterForm({ submitForm, isCPFValid }) {
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [cpf, setCpf] = useState("");
   const [promo, setPromo] = useState(true);
   const [news, setNews] = useState(true);
+  const [errors, setErrors] = useState({ cpf: { isValid: true, text: "" } });
   return (
     <form
       onSubmit={(event) => {
@@ -43,6 +44,14 @@ function RegisterForm({ submitForm }) {
         }}
         id="cpf"
         label="CPF"
+        onBlur={(event) => {
+          const validationCPF = isCPFValid(event.target.value);
+          setErrors({
+            cpf: validationCPF,
+          });
+        }}
+        error={!errors.cpf.isValid}
+        helperText={errors.cpf.text}
         variant="outlined"
         fullWidth
         margin="normal"

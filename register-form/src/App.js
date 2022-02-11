@@ -13,13 +13,24 @@ function App() {
       <Typography variant="h3" component="h1" align="center">
         Register Form
       </Typography>
-      <RegisterForm submitForm={onSubmitForm} />
+      <RegisterForm
+        submitForm={onSubmitForm}
+        isCPFValid={isCPFValid}
+      />
     </Container>
   );
 }
 
 function onSubmitForm(dataForm) {
   console.log(dataForm);
+}
+
+function isCPFValid(cpf) {
+  if (cpf.length !== 11) {
+    return { isValid: false, text: "This field must have 11 digits." };
+  } else {
+    return { isValid: true, text: "" };
+  }
 }
 
 export default App;
