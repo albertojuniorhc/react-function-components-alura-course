@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@mui/material";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 function RegisterForm({
   submitForm,
@@ -66,6 +66,8 @@ function RegisterForm({
         variant="outlined"
         fullWidth
         margin="normal"
+        
+        
       />
       <TextField
         value={cpf}
