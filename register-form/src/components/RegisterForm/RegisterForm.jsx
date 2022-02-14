@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@mui/material";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 
 function RegisterForm({
   submitForm,
@@ -13,20 +13,33 @@ function RegisterForm({
   const [cpf, setCpf] = useState("");
   const [promo, setPromo] = useState(true);
   const [news, setNews] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [errors, setErrors] = useState({
     cpf: { isValid: true, text: "" },
     name: { isValid: true, text: "" },
     lastName: { isValid: true, text: "" },
   });
 
-  const validation = (field, func) => {
+  const validationField = (field, func) => {
     const fieldValidation = func(field.value);
-    setErrors({ ...errors, [field.id]: fieldValidation });
+    const errorsTemp = { ...errors, [field.id]: fieldValidation };
+    setErrors(errorsTemp);
+    validationForm(errorsTemp);
   };
 
   // useEffect(() => {
-  //   console.log("*****", errors);
-  // }, [errors]);
+  //   console.log("isFormValid", isFormValid);
+  // }, [isFormValid]);
+
+  const validationForm = (obj) => {
+    let control = 0;
+    for (let [key, value] of Object.entries(obj)) {
+      if (value.isValid === false) {
+        control++;
+      }
+    }
+    control > 0 ? setIsFormValid(false) : setIsFormValid(true);
+  };
 
   return (
     <form
@@ -41,7 +54,7 @@ function RegisterForm({
           setName(event.target.value);
         }}
         onBlur={(event) => {
-          validation(event.target, isNameValid);
+          validationField(event.target, isNameValid);
         }}
         error={!errors.name.isValid}
         helperText={errors.name.text}
@@ -57,7 +70,7 @@ function RegisterForm({
           setLastName(event.target.value);
         }}
         onBlur={(event) => {
-          validation(event.target, isLastNameValid);
+          validationField(event.target, isLastNameValid);
         }}
         error={!errors.lastName.isValid}
         helperText={errors.lastName.text}
@@ -66,8 +79,6 @@ function RegisterForm({
         variant="outlined"
         fullWidth
         margin="normal"
-        
-        
       />
       <TextField
         value={cpf}
@@ -77,7 +88,7 @@ function RegisterForm({
         id="cpf"
         label="CPF"
         onBlur={(event) => {
-          validation(event.target, isCPFValid);
+          validationField(event.target, isCPFValid);
         }}
         error={!errors.cpf.isValid}
         helperText={errors.cpf.text}
@@ -114,7 +125,12 @@ function RegisterForm({
         }
       />
 
-      <Button variant="contained" color="primary" type="submit">
+      <Button
+        disabled={!isFormValid}
+        variant="contained"
+        color="primary"
+        type="submit"
+      >
         Send
       </Button>
     </form>
